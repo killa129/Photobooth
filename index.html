@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FACEMASK_OS // Neural Interface</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="js/aframe.min.js"></script>
+    <script src="js/zappar-aframe/zappar-aframe.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@latest/dist/aframe-extras.min.js"></script>
+</head>
+<body>
+
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="grid-bg" aria-hidden="true"></div>
+
+    <a-scene>
+        <a-entity zappar-permissions-ui></a-entity>
+        <a-entity zappar-compatibility-ui></a-entity>
+
+        <a-entity id="zappar-camera-entity"
+                  camera
+                  zappar-camera="user-facing: true"></a-entity>
+
+        <a-entity zappar-face id="my-face-tracker">
+            <a-entity zappar-head-mask="face: #my-face-tracker"></a-entity>
+            <a-entity id="masks-container"></a-entity>
+        </a-entity>
+    </a-scene>
+
+    <!-- ============================================================
+         HUD: TOP BAR
+         ============================================================ -->
+    <header class="topbar">
+        <div class="brand">
+            <span class="brand-mark"></span>
+            <span class="brand-name" data-text="FACEMASK_OS">FACEMASK_OS</span>
+            <span class="brand-ver">v2.1.7</span>
+        </div>
+
+        <button id="toggle-panel" class="toggle-panel" aria-label="Открыть панель масок">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            <span>MODULES</span>
+        </button>
+    </header>
+
+    <div id="status" class="status">
+        <span class="status-prefix">SYS</span>
+        <span class="status-text">INITIALIZING…</span>
+    </div>
+
+    <!-- ============================================================
+         HUD: CAROUSEL
+         ============================================================ -->
+    <nav class="carousel" aria-label="Переключение масок">
+        <button id="btn-prev" class="carousel-btn" aria-label="Предыдущая маска">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="miter">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+        </button>
+
+        <div class="carousel-readout">
+            <span class="carousel-label">MASK</span>
+            <span class="carousel-count">01/03</span>
+            <div class="carousel-bars">
+                <i></i><i></i><i></i>
+            </div>
+        </div>
+
+        <button id="btn-next" class="carousel-btn" aria-label="Следующая маска">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="miter">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- ============================================================
+         HUD: ADMIN PANEL
+         ============================================================ -->
+    <aside id="admin-panel" class="admin-panel hidden">
+        <div class="panel-header">
+            <div class="panel-heading">
+                <span class="panel-eyebrow">/// LOADED_MODULES</span>
+                <h2>MASK REGISTRY</h2>
+            </div>
+            <button id="close-panel" class="icon-btn" aria-label="Закрыть панель">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.4" stroke-linecap="square">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="panel-body">
+            <div id="masks-list" class="masks-list"></div>
+        </div>
+
+        <div class="panel-footer">
+            <button class="btn-primary" onclick="document.getElementById('file-input').click()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter">
+                    <path d="M12 3v14"/>
+                    <polyline points="7 8 12 3 17 8"/>
+                    <line x1="4" y1="21" x2="20" y2="21"/>
+                </svg>
+                <span>UPLOAD MODULE</span>
+            </button>
+            <input type="file" id="file-input" accept=".png,.glb,.gltf"
+                   style="display: none;" onchange="handleFileUpload(event)">
+            <p class="panel-hint">// PNG · GLB · GLTF &nbsp;|&nbsp; ENCRYPTED</p>
+        </div>
+    </aside>
+
+    <script src="app.js"></script>
+</body>
+</html>
